@@ -9,28 +9,15 @@
       <!--            搜索框区域-->
       <el-row :gutter="20">
         <el-col :span="4">
-          <el-input
-            v-model="queryInfo.name"
-            placeholder="请输入商品名称"
-            clearable
-            @clear="getOrderList"
-          >
+          <el-input v-model="queryInfo.name" placeholder="请输入商品名称" clearable @clear="getOrderList">
           </el-input>
         </el-col>
         <el-col :span="6">
-          <el-input
-            v-model="queryInfo.orderNumber"
-            placeholder="请输入订单号"
-            clearable
-            @clear="getOrderList"
-          >
+          <el-input v-model="queryInfo.orderNumber" placeholder="请输入订单号" clearable @clear="getOrderList">
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-select
-            v-model="queryInfo.orderState"
-            placeholder="请选择货物状态"
-          >
+          <el-select v-model="queryInfo.orderState" placeholder="请选择货物状态">
             <el-option label="全部" value="0"></el-option>
             <el-option label="正常" value="1"></el-option>
             <el-option label="缺货" value="2"></el-option>
@@ -44,20 +31,12 @@
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column
-          label="订单编号"
-          prop="orderNum"
-          width="180px"
-        ></el-table-column>
+        <el-table-column label="订单编号" prop="orderNum" width="180px"></el-table-column>
         <el-table-column label="商品名称" prop="name"></el-table-column>
         <el-table-column label="价格" prop="price"></el-table-column>
         <el-table-column label="订购数量" prop="count"></el-table-column>
         <el-table-column label="订购单位" prop="util"> </el-table-column>
-        <el-table-column
-          label="订单创建时间"
-          prop="date"
-          width="180px"
-        ></el-table-column>
+        <el-table-column label="订单创建时间" prop="date" width="180px"></el-table-column>
         <el-table-column label="关联订单Id" prop="relationOrderId">
         </el-table-column>
         <el-table-column label="是否需要发票" prop="invoiceEnabled">
@@ -78,72 +57,29 @@
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
             <!--修改-->
-            <el-tooltip
-              effect="dark"
-              content="修改订单信息"
-              placement="top"
-              :enterable="false"
-            >
-              <el-button
-                type="primary"
-                icon="el-icon-edit"
-                size="mini"
-                @click="openEditDialog(scope.row)"
-              ></el-button>
+            <el-tooltip effect="dark" content="修改订单信息" placement="top" :enterable="false">
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="openEditDialog(scope.row)"></el-button>
             </el-tooltip>
             <!--查看进度-->
-            <el-tooltip
-              effect="dark"
-              content="查看进度"
-              placement="top"
-              :enterable="false"
-              v-if="scope.row.orderState > 0"
-            >
-              <el-button
-                type="success"
-                icon="el-icon-time"
-                size="mini"
-                @click="openSchedule(scope.row)"
-              ></el-button>
+            <el-tooltip effect="dark" content="查看进度" placement="top" :enterable="false" v-if="scope.row.orderState > 0">
+              <el-button type="success" icon="el-icon-time" size="mini" @click="openSchedule(scope.row)"></el-button>
             </el-tooltip>
             <!--删除操作-->
             <!--查看进度-->
-            <el-tooltip
-              effect="dark"
-              content="退订单"
-              placement="top"
-              :enterable="false"
-              v-if="scope.row.orderState == 0"
-            >
-              <el-button
-                type="danger"
-                icon="el-icon-delete"
-                size="mini"
-                @click="deleteOrder(scope.row)"
-              ></el-button>
+            <el-tooltip effect="dark" content="退订单" placement="top" :enterable="false" v-if="scope.row.orderState == 0">
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteOrder(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
       <!--分页区域-->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryInfo.pageNum"
-        :page-sizes="[2, 5, 7, 10]"
-        :page-size="queryInfo.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-      >
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="queryInfo.pageNum" :page-sizes="[2, 5, 7, 10]" :page-size="queryInfo.size"
+        layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
       <!--修改-->
       <el-dialog title="修改订单" :visible.sync="editOrderDialog" width="40%">
-        <el-form
-          ref="editUserRef"
-          :model="orderInfo"
-          :rules="addOrderRules"
-          label-width="80px"
-        >
+        <el-form ref="editUserRef" :model="orderInfo" :rules="addOrderRules" label-width="80px">
           <el-form-item label="订单编号">
             <el-input v-model="orderInfo.orderNum" disabled></el-input>
           </el-form-item>
@@ -167,12 +103,7 @@
       </el-dialog>
       <!-- 查看进度-->
       <el-dialog title="订单跟踪" :visible.sync="scheduleDialog" width="50%">
-        <el-steps
-          :space="200"
-          :active="state"
-          align-center
-          finish-status="success"
-        >
+        <el-steps :space="200" :active="state" align-center finish-status="success">
           <el-step title="生成订单"></el-step>
           <el-step title="新建生产"></el-step>
           <el-step title="生产完成"></el-step>
@@ -186,53 +117,30 @@
         </span>
       </el-dialog>
       <!--  新建订单-->
-      <el-dialog
-        title="新建订单"
-        :visible.sync="addOrderDialog"
-        width="40%"
-        @close="addOrderDialogClosed"
-      >
+      <el-dialog title="新建订单" :visible.sync="addOrderDialog" width="40%" @close="addOrderDialogClosed">
         <!--内容主体区域-->
-        <el-form
-          :model="addOrder"
-          :rules="addOrderRules"
-          ref="addOrderRef"
-          label-width="90px"
-        >
+        <el-form :model="addOrder" :rules="addOrderRules" ref="addOrderRef" label-width="90px">
           <el-form-item label="商品名" prop="name">
             <el-input v-model="addOrder.name"></el-input>
           </el-form-item>
           <el-form-item label="订购数量" prop="count">
-            <el-input
-              v-model="addOrder.count"
-              @input="calcTotalPrice"
-            ></el-input>
+            <el-input v-model="addOrder.count" @input="calcTotalPrice"></el-input>
           </el-form-item>
           <el-form-item label="计量单位" prop="util">
             <el-input v-model="addOrder.util"></el-input>
           </el-form-item>
           <el-form-item label="订购价格" prop="price">
-            <el-input
-              v-model="addOrder.price"
-              @input="calcTotalPrice"
-            ></el-input>
+            <el-input v-model="addOrder.price" @input="calcTotalPrice"></el-input>
           </el-form-item>
           <el-form-item label="订购总额" prop="totalPrice">
             <el-input v-model="addOrder.totalPrice" disabled></el-input>
           </el-form-item>
           <el-form-item label="发票信息">
-            <el-switch
-              v-model="addOrder.invoiceEnabled"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            >
+            <el-switch v-model="addOrder.invoiceEnabled" active-color="#13ce66" inactive-color="#ff4949">
             </el-switch>
           </el-form-item>
           <el-form-item label="订单类型">
-            <el-select
-              v-model="addOrder.orderType"
-              placeholder="请选择订单类型"
-            >
+            <el-select v-model="addOrder.orderType" placeholder="请选择订单类型">
               <el-option label="新订" value="1"></el-option>
               <el-option label="换货" value="2"></el-option>
             </el-select>
@@ -253,55 +161,40 @@
             <el-input v-model="addOrder.content"></el-input>
           </el-form-item>
           <el-form-item label="客户名称">
-            <el-autocomplete
-              v-model="addOrder.clientName"
-              :fetch-suggestions="querySearchAsync"
-              placeholder="请输入内容"
-              @select="handleSelect"
-            ></el-autocomplete>
+            <el-autocomplete v-model="addOrder.clientName" :fetch-suggestions="querySearchAsync" placeholder="请输入内容"
+              @select="handleSelect"></el-autocomplete>
           </el-form-item>
         </el-form>
       </el-dialog>
 
-        <!-- 退订单 -->
-        <el-dialog
-        title="退订"
-        :visible.sync="backOrderDialog"
-        width="40%"
-      >
+      <!-- 退订单 -->
+      <el-dialog title="退订" :visible.sync="backOrderDialog" width="40%">
         <!--内容主体区域-->
-        <el-form
-          :model="backOrder"
-          ref="backOrderRef"
-          label-width="90px"
-        >
+        <el-form :model="backOrder" ref="backOrderRef" label-width="90px">
           <el-form-item label="商品名" prop="name">
             <el-input v-model="backOrder.name" disabled></el-input>
           </el-form-item>
           <el-form-item label="退订数量" prop="count">
-            <el-input
-              v-model="backOrder.count"
-            ></el-input>
+            <el-input v-model="backOrder.count"></el-input>
           </el-form-item>
           <el-form-item label="订购单价" prop="price">
-            <el-input
-              v-model="backOrder.price" disabled
-            ></el-input>
+            <el-input v-model="backOrder.price" disabled></el-input>
           </el-form-item>
           <el-form-item label="原订单号">
             <el-input v-model="backOrder.orderNum" disabled></el-input>
           </el-form-item>
           <el-form-item label="订单日期">
-            <el-input v-model="backOrder.date" disabled></el-input>
+            <el-input v-model="backOrder.date" disabled></el-input> 
           </el-form-item>
           <el-form-item label="退订原因">
             <el-input v-model="backOrder.reason"></el-input>
           </el-form-item>
           <el-form-item label="退订日期">
-            <el-input v-model="backOrder.backDate" disabled></el-input>
+            <el-date-picker v-model="backOrder.backDate" type="date" placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
           <el-form-item label="客户名称">
-            <el-input v-model="backOrder.goodsContent" disabled></el-input>
+            <el-input v-model="backOrder.clientName" disabled></el-input>
           </el-form-item>
         </el-form>
         <!--内容底部区域-->
@@ -454,8 +347,8 @@ export default {
     },
     //删除订单
     deleteOrder(row) {
-        console.log(row)
       this.backOrder = JSON.parse(JSON.stringify(row))
+      this.$http.get('/client/client/' + row.clientId).then(res => this.backOrder.clientName = res.obj.name)
       this.backOrderDialog = true
     },
     calcTotalPrice() {
@@ -468,7 +361,9 @@ export default {
       this.addOrder.totalPrice = this.addOrder.count * this.addOrder.price;
     },
     addBackOrder() {
-
+      this.backOrder.time = this.backOrder.backDate.getTime()
+      this.backOrder.relationOrderId = this.backOrder.orderNum
+        this.$http.post('/order/addOrder', this.backOrder).then(res => this.backOrderDialog = false)
     }
   },
   created() {
@@ -477,5 +372,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>
