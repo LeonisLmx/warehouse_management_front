@@ -183,7 +183,7 @@
             async getMenuList() {
                 const res = await this.$http.get('/menuList')
                 this.menuList = res.obj
-                // console.log(res)
+                console.log(res)
             },
             //打开用户资料对话框
             openUserData() {

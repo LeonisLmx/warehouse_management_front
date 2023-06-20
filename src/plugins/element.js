@@ -49,9 +49,11 @@ import {
     TabPane,
     Upload,
     Checkbox,
-    Badge
+    Badge,
+    DatePicker,
 } from 'element-ui'
 
+Vue.use(DatePicker)
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
