@@ -16,6 +16,7 @@ import {postKeyValueRequest} from "./util/api";
 import {putRequest} from "./util/api";
 import {deleteRequest} from "./util/api";
 import {getRequest} from "./util/api";
+import echarts from "echarts";
 //import 'font-awesome/css/font-awesome.min.css'
 //自定义全局组件
 Vue.prototype.postRequest = postRequest;
@@ -27,6 +28,7 @@ Vue.prototype.$http=axios;
 Vue.prototype.$websocket=websocket;
 // Vue.prototype.websocket=new WebSocket("ws://localhost:8181/ws/asset/" + this.$store.state.user.name);
 Vue.config.productionTip = false;
+Vue.prototype.$echarts = echarts;
 //通过axios请求拦截器添加token保证，拥有获取数据的权限
 //在request拦截器中展示nprogress
 axios.interceptors.request.use(config=>{

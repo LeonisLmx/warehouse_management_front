@@ -7,7 +7,7 @@ import UserList from "../components/user/userList"
 import PowList from "../components/power/PowList"
 import RoleList from "../components/power/RoleList"
 import SystemSql from "../components/system/SystemSql";
-import OrderList from "../components/order/OrderList";
+import OrderList from "../components/client/OrderList";
 import OutputList from "../components/output/OutputList";
 import Enter from "../components/warehouse/Enter";
 import Out from "../components/warehouse/Out";
@@ -20,6 +20,9 @@ import Shelf from "../components/warehouse/Shelf";
 import Transition from "../components/output/Transition";
 import Report from "../components/data/Report";
 import AddressBook from "../components/comm/AddressBook";
+import OrderDetail from "../components/client/OrderDetail";
+import ManageOrderTable from "../components/client/ManageOrderTable";
+import HandSchedule from "../components/schedule/HandSchedule";
 Vue.use(VueRouter)
 
 const routes = [
@@ -101,6 +104,16 @@ const routes = [
             {
                 path:'/addressBook',
                 component:AddressBook
+            },
+            {
+                path:'/orderDetail',
+                component:OrderDetail
+            },{
+                path: '/manageOrderTable',
+                component:ManageOrderTable
+            },{
+                path: '/handSchedule',
+                component: HandSchedule
             }
         ]
     }

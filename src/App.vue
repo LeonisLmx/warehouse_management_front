@@ -9,6 +9,7 @@ export default {
   data(){
     return{
       b:false,
+      CLIENT_LIST: []
     }
   },
   destroyed: function () { // 离开页面生命周期函数

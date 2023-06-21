@@ -9,11 +9,11 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="4">
-          <el-date-picker v-model="value1" type="date" placeholder="选择日期">
+          <el-date-picker v-model="queryInfo.date" type="date" placeholder="选择日期">
           </el-date-picker>
         </el-col>
         <el-col :span="4">
-          <el-select v-model="value" placeholder="请选择订单状态">
+          <el-select v-model="queryInfo.orderState" placeholder="请选择订单状态">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -23,30 +23,24 @@
             </el-option>
           </el-select>
         </el-col>
-        <el-col>
+        <el-col :span="4">
             <el-button type="primary" @click="getOrderList">搜索</el-button>
         </el-col>
       </el-row>
       <!--  表格区域-->
       <el-table
-        v-loading="loading"
-        :data="transitionInfo"
+        :data="orders"
         border
         height="490"
         stripe
       >
-        <el-table-column label="#" type="index"></el-table-column>
+        <el-table-column label="编号" type="index"></el-table-column>
         <el-table-column label="订单号" prop="orderNum"></el-table-column>
-        <el-table-column label="产品名称" prop="name"></el-table-column>
-        <el-table-column label="计划生产数量" prop="plan"></el-table-column>
-        <el-table-column label="实际完成数量" prop="complete"></el-table-column>
-        <el-table-column label="生产线" prop="outputId"></el-table-column>
-        <el-table-column label="产品状态" prop="state">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.state === 2" type="warning">待检</el-tag>
-            <el-tag v-if="scope.row.state === 1" type="danger">未入库</el-tag>
-            <el-tag v-if="scope.row.state === 3" type="success">已入库</el-tag>
-          </template>
+        <el-table-column label="商品代号" prop="name"></el-table-column>
+        <el-table-column label="商品名称" prop="plan"></el-table-column>
+        <el-table-column label="商品数量" prop="complete"></el-table-column>
+        <el-table-column label="订单状态" prop="outputId"></el-table-column>
+        <el-table-column label="订单类型" prop="state">
         </el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
@@ -186,14 +180,14 @@ export default {
   data() {
     return {
       queryInfo: {
-        name: "",
-        state: "",
+        date: "",
+        orderState: "",
       },
       query: {
         id: 2,
       },
-      //所有生产完毕产品
-      transitionInfo: [],
+      // 所有待调度订单
+      orders: [],
       loading: true,
       storeDialog: false,
       //暂存数据
@@ -234,22 +228,11 @@ export default {
     };
   },
   created() {
-    this.getTransition();
+    this.getOrderList();
   },
   methods: {
-    async getTransition() {
-      this.loading = true;
-      const res = await this.$http.get("/transition/myTransition/", {
-        params: this.queryInfo,
-      });
-      for (let i = 0; i < res.obj.length; i++) {
-        if (res.obj[i].orderNum === "") {
-          res.obj[i].orderNum = "自主生产";
-        }
-        res.obj[i].outputId = res.obj[i].outputId + "号生产线";
-      }
-      this.transitionInfo = res.obj;
-      this.loading = false;
+    async getOrderList() {
+      
     },
     storeClosed() {
       this.store = {
