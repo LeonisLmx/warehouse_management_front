@@ -17,7 +17,7 @@ import ClientList from "../components/client/ClientList";
 import MyWarehouse from "../components/warehouse/MyWarehouse";
 import Region from "../components/warehouse/Region";
 import Shelf from "../components/warehouse/Shelf";
-import Transition from "../components/output/Transition";
+import Transition from "../components/schedule/Transition";
 import Report from "../components/data/Report";
 import AddressBook from "../components/comm/AddressBook";
 import OrderDetail from "../components/client/OrderDetail";

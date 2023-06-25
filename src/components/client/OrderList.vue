@@ -43,12 +43,12 @@
             clearable
           >
             <el-option
-                v-for="item in orderTypeOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
+              v-for="item in orderTypeOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
           </el-select>
         </el-col>
         <el-col :span="8">
@@ -85,9 +85,9 @@
             {{ parseOrderType(scope.row.orderType) }}
           </template>
         </el-table-column>
-        <el-table-column label="货物状态" prop="orderState">
+        <el-table-column label="订单状态" prop="orderState">
           <template slot-scope="scope">
-            {{ scope.row.orderState == "0" ? "缺货" : "正常" }}
+            {{ parseOrderState(scope.row.orderState) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300px">
@@ -98,6 +98,7 @@
               content="修改订单信息"
               placement="top"
               :enterable="false"
+              v-if="scope.row.orderState <= 2"
             >
               <el-button
                 type="primary"
@@ -128,7 +129,7 @@
               content="退订"
               placement="top"
               :enterable="false"
-              v-if="scope.row.orderState == 0"
+              v-if="scope.row.orderState <= 2"
             >
               <el-button
                 type="danger"
@@ -161,6 +162,20 @@
                 icon="el-icon-delete-solid"
                 size="mini"
                 @click="deleteOrder(scope.row, 4)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip
+              effect="dark"
+              content="货物到站"
+              placement="top"
+              :enterable="false"
+              v-if="scope.row.orderState == 0"
+            >
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                @click="editOrderState(scope.row)"
               ></el-button>
             </el-tooltip>
           </template>
@@ -306,7 +321,14 @@
               @select="handleSelect"
             ></el-autocomplete>
           </el-form-item>
+          <el-form-item label="是否缺货">
+            <el-checkbox v-model="addOrder.checked">缺货</el-checkbox>
+          </el-form-item>
         </el-form>
+          <span slot="footer" class="dialog-footer">
+          <el-button @click="addOrderDialog = false">取 消</el-button>
+          <el-button type="primary" @click="addOrderYes">确 定</el-button>
+        </span>
       </el-dialog>
 
       <!-- 退订单 -->
@@ -446,6 +468,7 @@ export default {
     openEditDialog(orderInfo) {
       this.editOrderDialog = true;
       this.orderInfo = orderInfo;
+      this.orderInfo.checked = this.orderInfo.orderState == 0;
     },
     //查看进度
     openSchedule(orderInfo) {
@@ -514,7 +537,7 @@ export default {
     },
     //删除订单
     deleteOrder(row, orderType) {
-      this.dialogTitle = this.parseOrderType(orderType)
+      this.dialogTitle = this.parseOrderType(orderType);
       this.backOrder = JSON.parse(JSON.stringify(row));
       this.$http
         .get("/client/client/" + row.clientId)
@@ -538,10 +561,19 @@ export default {
         .then((res) => (this.backOrderDialog = false));
     },
     parseOrderType(orderType) {
-      return this.orderTypeOption.find(res => {
-         return res.value == orderType
-      }).label
+      return this.orderTypeOption.find((res) => {
+        return res.value == orderType;
+      }).label;
     },
+    parseOrderState(orderState) {
+      return this.GLOBAL.parseOrderState(orderState);
+    },
+    editOrderState(row) {
+      this.$http.post('/order/stateUpdate', {"orderNum": row.orderNum, "orderState": 1})
+      .then(res => {
+          this.getOrderList();
+      })
+    }
   },
   created() {
     this.getOrderList();

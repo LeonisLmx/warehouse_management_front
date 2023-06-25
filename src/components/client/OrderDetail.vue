@@ -79,7 +79,11 @@
         <el-table-column label="电话" prop="phone"></el-table-column>
         <el-table-column label="商品名称" prop="name"></el-table-column>
         <el-table-column label="商品数量" prop="count"> </el-table-column>
-        <el-table-column label="订单状态" prop="orderState"> </el-table-column>
+        <el-table-column label="订单状态" prop="orderState">
+          <template slot-scope="scope">
+            {{ parseOrderState(scope.row.orderType) }}
+          </template>
+        </el-table-column>
         <el-table-column label="订单类型" prop="orderType">
           <template slot-scope="scope">
             {{ parseOrderType(scope.row.orderType) }}
@@ -104,7 +108,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -116,34 +119,17 @@ export default {
       clientOptions: [],
       total: 0,
       orderList: [],
-      operateOption: [],
-      orderTypeOption: [
-        {
-          label: "新订",
-          value: 1,
-        },
-        {
-          label: "退订",
-          value: 2,
-        },
-        {
-          label: "换货",
-          value: 3,
-        },
-        {
-          label: "退货",
-          value: 4,
-        },
-      ],
-      pramTime: ''
+      orderTypeOption: this.GLOBAL.orderStateOption,
+      orderStateOption: this.GLOBAL.orderStateOption,
+      pramTime: "",
     };
   },
   methods: {
     async getOrderList() {
       this.loading = true;
-      if (this.pramTime != ''){
-        this.queryInfo.startTime = this.pramTime[0].getTime()
-        this.queryInfo.endTime = this.pramTime[1].getTime()
+      if (this.pramTime != "") {
+        this.queryInfo.startTime = this.pramTime[0].getTime();
+        this.queryInfo.endTime = this.pramTime[1].getTime();
       }
       const res = await this.$http.get("/order/list/", {
         params: this.queryInfo,
@@ -151,7 +137,7 @@ export default {
       if (res) {
         this.total = res.obj.total;
         this.orderList = res.obj.data;
-        console.log(this.orderList)
+        console.log(this.orderList);
       } else return;
       this.loading = false;
     },
@@ -192,9 +178,10 @@ export default {
         });
     },
     parseOrderType(orderType) {
-      return this.orderTypeOption.find((res) => {
-        return res.value == orderType;
-      }).label;
+      return this.GLOBAL.parseOrderType(orderType)
+    },
+    parseOrderState(state) {
+      return this.GLOBAL.parseOrderState(state)
     },
   },
   created() {
