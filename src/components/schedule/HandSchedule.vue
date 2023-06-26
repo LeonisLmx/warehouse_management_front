@@ -164,7 +164,18 @@
           :inline="true"
         >
           <el-form-item label="所属分站:" prop="substation">
-            <el-input v-model="stationModel.substation"> </el-input>
+            <el-select
+              v-model="stationModel.substationId"
+              placeholder="请选择所属分站"
+            >
+              <el-option
+                v-for="item in substations"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -184,6 +195,7 @@ export default {
         query: "",
         pageNum: 1,
         size: 7,
+        orderState: 2
       },
       clientOptions: [],
       total: 0,
@@ -200,6 +212,7 @@ export default {
       dataModel: {},
       viewDialog: false,
       operateOption: [],
+      substations: [],
     };
   },
   methods: {
@@ -255,13 +268,17 @@ export default {
     },
     selectStation(row) {
       this.stationDialog = true;
-      this.stationModel.substation = row.substation;
+      this.stationModel = row;
     },
     editSubstation() {
       this.$http
-        .post("/order/selectSubstation", this.substation)
+        .post("/order/selectSubstation", {
+          substationId: this.stationModel.substationId,
+          orderNum: this.stationModel.orderNum,
+        })
         .then((res) => {
           this.stationDialog = false;
+          this.getOrderList();
         });
     },
     viewInfo(orderNum) {
@@ -276,16 +293,27 @@ export default {
           this.dataModel.phone = res.obj.client.phone;
           this.dataModel.postcode = res.obj.client.postcode;
           this.dataModel.invoice = this.dataModel.invoiceEnabled ? "是" : "否";
+          if (this.dataModel.substationId != null) {
+            this.dataModel.substation = this.substations.find(
+              (ans) => ans.id == this.dataModel.substationId
+            ).name;
+          }
           this.dataModel.operateName = this.operateOption.find(
             (ans) => ans.id == this.dataModel.operateId
           ).name;
         });
     },
     parseOrderState(state) {
-        return this.GLOBAL.parseOrderState(state)
-    }
+      return this.GLOBAL.parseOrderState(state);
+    },
+    getSubstations() {
+      this.$http.get("/substation/list").then((res) => {
+        this.substations = res.obj;
+      });
+    },
   },
   created() {
+    this.getSubstations();
     this.querySearchAsync();
     this.queryManage();
     this.getOrderList();

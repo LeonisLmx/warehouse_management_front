@@ -200,6 +200,7 @@ export default {
         query: "",
         pageNum: 1,
         size: 7,
+        orderState: 2
       },
       clientOptions: [],
       total: 0,

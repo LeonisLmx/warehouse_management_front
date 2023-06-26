@@ -6,7 +6,6 @@ import Welcome from "../components/Welcome"
 import UserList from "../components/user/userList"
 import PowList from "../components/power/PowList"
 import RoleList from "../components/power/RoleList"
-import SystemSql from "../components/system/SystemSql";
 import OrderList from "../components/client/OrderList";
 import OutputList from "../components/output/OutputList";
 import Enter from "../components/warehouse/Enter";
@@ -23,6 +22,8 @@ import AddressBook from "../components/comm/AddressBook";
 import OrderDetail from "../components/client/OrderDetail";
 import ManageOrderTable from "../components/client/ManageOrderTable";
 import HandSchedule from "../components/schedule/HandSchedule";
+import SubstationList from "../components/substation/SubstationList";
+import SubstationOrderManage from "../components/substation/OrderManage";
 Vue.use(VueRouter)
 
 const routes = [
@@ -48,10 +49,6 @@ const routes = [
             {
                 path: '/roleList',
                 component: RoleList
-            },
-            {
-                path: '/systemSql',
-                component: SystemSql
             },
             {
                 path: '/orderList',
@@ -114,6 +111,12 @@ const routes = [
             },{
                 path: '/handSchedule',
                 component: HandSchedule
+            },{
+                path: '/substationList',
+                component: SubstationList
+            },{
+                path: '/substationOrderManage',
+                component: SubstationOrderManage
             }
         ]
     }
