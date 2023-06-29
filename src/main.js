@@ -18,7 +18,9 @@ import {deleteRequest} from "./util/api";
 import {getRequest} from "./util/api";
 import echarts from "echarts";
 import globalVal from './components/util/Global.vue'
+import Print from 'vue-print-nb'
 //import 'font-awesome/css/font-awesome.min.css'
+Vue.use(Print)
 //自定义全局组件
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.postKeyValueRequest = postKeyValueRequest;

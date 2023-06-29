@@ -21,27 +21,21 @@
           </el-date-picker>
         </el-col>
         <el-col :span="3">
-            <el-select v-model="ship.orders" placeholder="请选择订单">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-            </el-select>
+          <el-select v-model="role" placeholder="请选择角色">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="getFinanceList">搜索</el-button>
         </el-col>
       </el-row>
-      <el-table
-        v-loading="loading"
-        :data="dataList"
-        border
-        height="490"
-        stripe
-      >
+      <el-table v-loading="loading" :data="dataList" border height="490" stripe>
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column
           label="财务操作"
@@ -70,14 +64,18 @@ export default {
           value: 3,
         },
       ],
-      dataList: []
+      dataList: [],
+      role: ''
     };
   },
   methods: {
     //获取货物列表
     async getFinanceList() {
       this.loading = true;
-      var url = "/finance/search?role=" + ;
+      var url = "/finance/search?role=" + role;
+      if(len(this.pramTime) > 0){
+        
+      }
       const res = await this.$http.get(url);
       if (res) {
         this.enterList = res.obj;

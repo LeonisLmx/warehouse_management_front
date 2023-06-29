@@ -24,6 +24,8 @@ import ManageOrderTable from "../components/client/ManageOrderTable";
 import HandSchedule from "../components/schedule/HandSchedule";
 import SubstationList from "../components/substation/SubstationList";
 import SubstationOrderManage from "../components/substation/OrderManage";
+import PrintExpress from "../components/substation/PrintExpress";
+import Receipt from "../components/substation/Receipt";
 Vue.use(VueRouter)
 
 const routes = [
@@ -117,6 +119,12 @@ const routes = [
             },{
                 path: '/substationOrderManage',
                 component: SubstationOrderManage
+            },{
+                path: '/printExpress',
+                component: PrintExpress
+            },{
+                path: '/receipt',
+                component: Receipt
             }
         ]
     }
