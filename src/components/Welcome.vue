@@ -1,20 +1,6 @@
 <template>
     <div class="welcome">
         <el-row :gutter="10">
-            <el-col :span="11" class="col1">
-                <el-tabs v-model="activeName">
-                    <el-tab-pane label="天气预报" name="first" style="align-content: center">
-                                                <div id="weather-view-he"></div>
-<!--                        <div style="margin-left: 20px">-->
-<!--                            <h4>您好: {{$store.state.user.name}}</h4>-->
-<!--                            <p>您拥有{{$store.state.user.roleName}}权限</p>-->
-<!--                        </div>-->
-
-                    </el-tab-pane>
-                </el-tabs>
-
-
-            </el-col>
             <el-col :span="11" class="col2">
                 <el-tabs v-model="activeName">
                     <el-tab-pane label="系统介绍" name="first" style="align-content: center">
@@ -22,33 +8,43 @@
 
                             <el-collapse-item>
                                 <template slot="title">
-                                    订单模块<i class="header-icon el-icon-info"></i>
+                                    调度中心<i class="header-icon el-icon-info"></i>
                                 </template>
-                                <div> 订单模块的重要功能就是实现了对所创建订单的全程监控，使订单信息更直观的展示给企业管理者。<br>
-                                    <span style="color: red">本系统中订单管理模块提供了订单的添加、修改、删除功能。</span></div>
+                                <div> 调度中心的重要功能就是实现了对订单的调度功能。<br>
+                                    <!-- <span style="color: red">本系统中订单管理模块提供了订单的添加、修改、删除功能。</span></div> -->
+                                </div>
                             </el-collapse-item>
                             <el-collapse-item>
                                 <template slot="title">
-                                    生产模块<i class="header-icon el-icon-info"></i>
+                                    库房管理<i class="header-icon el-icon-info"></i>
                                 </template>
-                                <div> 生产线是企业的重要组成部分，生产产品基于订单和自主生产。生产监控提高了企业的工作效率。<br>
-                                    <span style="color: red">本系统中生产模块提供了生产线的增删查改操作，以及新建生产，工作进度，生产日志等功能。</span></div>
+                                <div> 库房管理是针对商品库存的管理。<br>
+                                    <!-- <span style="color: red">本系统中生产模块提供了生产线的增删查改操作，以及新建生产，工作进度，生产日志等功能。</span></div> -->
+                                </div>
                             </el-collapse-item>
                             <el-collapse-item>
                                 <template slot="title">
-                                    仓库模块<i class="header-icon el-icon-info"></i>
+                                    财务管理<i class="header-icon el-icon-info"></i>
                                 </template>
-                                <div> 仓库模块是本系统最重要的模块，用于将产品暂存、入库、盘点、出库以及订单的追踪。 <br>
-                                    <span style="color: red">本系统中仓库又分为待检库、普通仓库、废品库，仓库中包含库区库
-                                区中包含货架，真正的实现了监控每个货物以及仓库的使用量，为管理者提供了仓库的增删改查功能，
-                                矫正容量功能，禁用仓库功能，入库，盘点，出库等功能，并通过快递鸟第三方接口实现了物流订单的跟踪。</span></div>
+                                <div> 财务管理涵盖了收入，支出，发票等一些必要的信息 <br>
+                                    <!-- <span style="color: red"></span></div> -->
+                                </div>
                             </el-collapse-item>
                             <el-collapse-item>
                                 <template slot="title">
-                                    客户模块<i class="header-icon el-icon-info"></i>
+                                    客户服务中心<i class="header-icon el-icon-info"></i>
                                 </template>
-                                <div> 客户是针对某一特定细分市场而言的，他们的需求较集中，企业的经济效益大部分是客户带来的。<br>
-                                    <span style="color: red">本系统中客户管理模块提供了客户的添加、修改、查看订单、拉黑功能。</span></div>
+                                <div> 客户服务中心是针对于订单的全程管理以及一些详情管理。<br>
+                                    <!-- <span style="color: red">本系统中客户管理模块提供了客户的添加、修改、查看订单、拉黑功能。</span></div> -->
+                                </div>
+                            </el-collapse-item>
+                            <el-collapse-item>
+                                <template slot="title">
+                                    分站管理<i class="header-icon el-icon-info"></i>
+                                </template>
+                                <div> 分站管理是针对于投递分站的管理，可以增加或者删除。<br>
+                                    <!-- <span style="color: red">本系统中客户管理模块提供了客户的添加、修改、查看订单、拉黑功能。</span></div> -->
+                                </div>
                             </el-collapse-item>
                         </el-collapse>
                     </el-tab-pane>
@@ -56,7 +52,7 @@
             </el-col>
         </el-row>
         <!-- 第二列布局 -->
-        <el-row :gutter="10">
+        <!-- <el-row :gutter="10">
             <el-col :span="11" class="col1">
                 <el-tabs v-model="activeName">
                     <el-tab-pane label="仓库状态" name="first" style="align-content: center">
@@ -84,7 +80,7 @@
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
-        </el-row>
+        </el-row> -->
     </div>
 </template>
 

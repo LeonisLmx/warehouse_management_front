@@ -26,6 +26,7 @@ import SubstationList from "../components/substation/SubstationList";
 import SubstationOrderManage from "../components/substation/OrderManage";
 import PrintExpress from "../components/substation/PrintExpress";
 import Receipt from "../components/substation/Receipt";
+import GoodsManage from "../components/express/GoodsManage";
 Vue.use(VueRouter)
 
 const routes = [
@@ -125,6 +126,9 @@ const routes = [
             },{
                 path: '/receipt',
                 component: Receipt
+            },{
+                path: '/goodManage',
+                component: GoodsManage
             }
         ]
     }
