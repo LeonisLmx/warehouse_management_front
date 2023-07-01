@@ -16,36 +16,51 @@
       <!--            表格区域-->
       <el-table :data="orderList" border stripe>
         <el-table-column type="index" label="编号"></el-table-column>
-        <el-table-column label="订单编号" prop="orderNum"></el-table-column>
-        <el-table-column label="商品名称" prop="name"></el-table-column>
+        <el-table-column label="商品编号" prop="code"></el-table-column>
+        <el-table-column label="商品名称" prop="goodsName"></el-table-column>
+        <el-table-column label="商品成本价" prop="price"> </el-table-column>
         <el-table-column label="商品数量" prop="count"> </el-table-column>
-        <el-table-column label="订单状态" prop="orderState">
-          <template slot-scope="scope">
-            {{ parseOrderState(scope.row.orderState) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="订单类型" prop="orderType">
-          <template slot-scope="scope">
-            {{ parseOrderType(scope.row.orderType) }}
-          </template>
-        </el-table-column>
         <el-table-column label="订单时间" prop="date"> </el-table-column>
-        <el-table-column label="快递员" prop="expressName"> </el-table-column>
-        <el-table-column label="最后更新时间" prop="updateTime">
+        <el-table-column label="供应商" prop="supplierName"> </el-table-column>
+        <el-table-column label="可否退货" prop="enabledReturn">
+          <template slot-scope="scope">
+            {{ scope.row.enabledReturn?'是':'否' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="是否入库" prop="goodsId">
+          <template slot-scope="scope">
+            {{ scope.row.goodsId == null?'未入库':'已入库' }}
+          </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="180px">
           <template slot-scope="scope">
             <el-tooltip
               effect="dark"
-              content="配送单打印"
+              content="供应商货品入库"
               placement="top"
               :enterable="false"
+              v-if="scope.row.goodsId == null"
             >
               <el-button
                 type="primary"
                 icon="el-icon-s-home"
                 size="mini"
-                @click="viewOrderInfo(scope.row)"
+                @click="selectStation(scope.row)"
+              >
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+              effect="dark"
+              content="查看入库信息"
+              placement="top"
+              :enterable="false"
+              v-if="scope.row.goodsId != null"
+            >
+              <el-button
+                type="primary"
+                icon="el-icon-goods"
+                size="mini"
+                @click="viewGoodsInfo(scope.row)"
               >
               </el-button>
             </el-tooltip>
@@ -92,13 +107,39 @@
           <el-input v-model="dataModel.code"> </el-input>
         </el-form-item>
         <el-form-item label="商品名称">
-          <el-input v-model="dataModel.name"> </el-input>
+          <el-input v-model="dataModel.goodsName"> </el-input>
         </el-form-item>
         <el-form-item label="商品一级分类">
-          <el-input v-model="dataModel.firstCategory"> </el-input>
+          <el-select
+            v-model="dataModel.firstCategory"
+            placeholder="请选择一级类目"
+            @change="querySecondCategory"
+          >
+            <el-option
+              v-for="item in firstCategoryList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="商品二级分类">
-          <el-input v-model="dataModel.secondCategory"> </el-input>
+        <el-form-item label="商品二级分类" v-if="dataModel.firstCategory != null">
+          <el-select
+            v-model="dataModel.secondCategory"
+            placeholder="请选择二级类目"
+          >
+            <el-option
+              v-for="item in secondCategoryList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="dataModel.count"> </el-input>
         </el-form-item>
         <el-form-item label="计量单位">
           <el-input v-model="dataModel.measurement"> </el-input>
@@ -125,7 +166,7 @@
           <el-input v-model="dataModel.shelfLife"> </el-input>
         </el-form-item>
         <el-form-item label="可否退货">
-          <el-input v-model="dataModel.enabledReturn"> </el-input>
+          <el-checkbox v-model="dataModel.enabledReturn">可否退货</el-checkbox>
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="dataModel.content"> </el-input>
@@ -134,6 +175,36 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="newGoodDialog = false">取 消</el-button>
         <el-button @click="goodsEnter">商品录入</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="商品入库" :visible.sync="goodsEnterWarehouseDialog" width="45%">
+      <el-form :model="goodsModel" label-width="200px">
+        <el-form-item label="请选择存储仓库">
+          <el-cascader
+            v-model="goodsModel.substationId"
+            :options="substationList"
+            :props="{ expandTrigger: 'hover' }">
+          </el-cascader>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="goodsEnterWarehouseDialog = false">取 消</el-button>
+        <el-button @click="goodsEnterWarehouse">商品入库</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="入库信息" :visible.sync="goodsDetailvialog" width="45%">
+      <el-form :model="goodsDataModel" label-width="200px">
+        <el-form-item label="入库订单Id">
+          <el-input v-model="goodsDataModel.goodsId" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="仓库信息">
+          <el-input v-model="goodsDataModel.substaionName" disabled> </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="goodsDetailvialog = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -157,13 +228,24 @@ export default {
       newCategoryDialog: false,
       newGoodDialog: false,
       firstCategoryList: [],
+      secondCategoryList: [],
       categoryModel: {},
+      goodsEnterWarehouseDialog: false,
+      substationList: [],
+      goodsModel: {},
+      goodsDetailvialog: false,
+      goodsDataModel: {}
     };
   },
   methods: {
     queryCategory() {
       this.$http.get("/goodCategory/search?parentId=0").then((res) => {
         this.firstCategoryList = res.obj;
+      });
+    },
+    querySecondCategory() {
+      this.$http.get("/goodCategory/search?parentId=" + this.dataModel.firstCategory).then((res) => {
+        this.secondCategoryList = res.obj;
       });
     },
     addCategory() {
@@ -180,11 +262,44 @@ export default {
       })
     },
     goodsEnter() {
-
+      this.$http.post('/goods/enter', this.dataModel).then(res => {
+        this.newGoodDialog = false;
+        this.searchList()
+      })
+    },
+    searchList() {
+      this.$http.get('/goods/searchSupplierList').then(res => {
+        this.orderList = res.obj
+      })
+    },
+    selectStation(row) {
+      this.goodsEnterWarehouseDialog = true
+      this.goodsModel = row
+    },
+    getParentSubstation() {
+      this.$http.get("/substation/listAll").then((res) => {
+        this.substationList = res.obj;
+      });
+    },
+    goodsEnterWarehouse() {
+      this.goodsModel.substationId = this.goodsModel.substationId[this.goodsModel.substationId.length - 1]
+      this.$http.post('/goods/goodsToWarehouse', this.goodsModel).then(res => {
+        this.goodsEnterWarehouseDialog = false
+        this.searchList()
+      })
+    },
+    viewGoodsInfo(row) {
+      this.goodsDataModel = row
+      this.$http.get('/substation/getFullSubstation?goodsId=' + row.goodsId).then(res => {
+        this.goodsDataModel.substaionName = res.obj
+        this.goodsDetailvialog = true
+      })
     }
   },
   created() {
     this.queryCategory();
+    this.searchList();
+    this.getParentSubstation();
   },
 };
 </script>
