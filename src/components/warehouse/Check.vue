@@ -8,7 +8,42 @@
     </el-breadcrumb>
 
     <el-card>
-      <el-row :gutter="20"> </el-row>
+      <el-row :gutter="20">
+        <el-col :span="3">
+        <el-select
+            v-model="parentId"
+            placeholder="请选择中心库房"
+            clearable
+            @change="searchChildren"
+          >
+            <el-option
+              v-for="item in parentSubstationList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+        </el-select>
+        </el-col>
+        <el-col :span="3" v-if="parentId != 0">
+          <el-select
+            v-model="childrenId"
+            placeholder="请选择分站库房"
+            clearable
+          >
+            <el-option
+              v-for="item in substationList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+        </el-select>
+        </el-col>
+        <el-col :span="3">
+          <el-button type="primary" @click="searchData">搜索</el-button> 
+               </el-col>
+      </el-row>
       <el-table v-loading="loading" :data="dataList" border height="490" stripe>
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column
@@ -18,29 +53,54 @@
         ></el-table-column>
         <el-table-column label="总库存" prop="totalCount"></el-table-column>
         <el-table-column label="剩余库存" prop="remainCount"></el-table-column>
+        <el-table-column label="所属分站" prop="substationName"></el-table-column>
       </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
+import {Message, MessageBox} from 'element-ui'
 export default {
   data() {
     return {
       dataList: [],
       loading: false,
+      parentId: '',
+      childrenId: '',
+      parentSubstationList: [],
+      substationList: []
     };
   },
   methods: {
-    getList() {
-      this.$http.get("/goods/check").then((res) => {
+    getParentSubstation() {
+      this.$http.get("/substation/list").then((res) => {
+        this.parentSubstationList = res.obj;
+      });
+    },
+    searchChildren() {
+      this.$http.get("/substation/list?parentId=" + this.parentId).then((res) => {
+        this.substationList = res.obj;
+      });
+    },
+    searchData() {
+      var substaionId = this.parentId
+      if(this.childrenId != ''){
+        substaionId = this.childrenId
+      }
+      if (substaionId == ''){
+          Message.error("请选择仓库")
+          return
+      }
+      this.$http.get("/goods/check?substationId=" + substaionId).then((res) => {
         console.log(res)
         this.dataList = res.obj;
       });
     },
   },
   created() {
-    this.getList();
+    // this.searchData();
+    this.getParentSubstation();
   },
 };
 </script>

@@ -75,6 +75,31 @@
         <el-form-item label="数量">
           <el-input v-model="enter.count" style="width: 220px"></el-input>
         </el-form-item>
+        <!-- <el-form-item label="中心库房">
+          <el-select
+            v-model="enter.parentId"
+            placeholder="请选择中心库房"
+            clearable
+          >
+            <el-option
+              v-for="item in parentSubstationList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item> -->
+        <el-form-item label="分站库房">
+          <el-cascader
+            v-model="enter.substaionId"
+            :options="substationList"
+            :props="{ expandTrigger: 'hover' }">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="供应商名字">
+          <el-input v-model="enter.supplierName" style="width: 220px"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="enterDialog = false">取 消</el-button>
@@ -154,6 +179,7 @@ export default {
       },
       locationDialog: false,
       locations: [],
+      substationList: [],
     };
   },
   methods: {
@@ -205,6 +231,9 @@ export default {
         lid[i] = pid[i][pid[i].length - 1];
       }
       this.enter.lid = lid.join(",");
+      console.log(this.enter.substaionId)
+      this.enter.substationId = this.enter.substaionId[this.enter.substaionId.length - 1]
+      console.log(this.enter.substationId)
       this.$refs.enterRef.validate(async (valid) => {
           if (!valid){
             return
@@ -262,9 +291,15 @@ export default {
         this.locations = res.obj;
       }
     },
+    getParentSubstation() {
+      this.$http.get("/substation/listAll").then((res) => {
+        this.substationList = res.obj;
+      });
+    },
   },
   created() {
     this.getEnterList();
+    this.getParentSubstation();
   },
 };
 </script>

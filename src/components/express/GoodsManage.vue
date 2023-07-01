@@ -16,7 +16,7 @@
       <!--            表格区域-->
       <el-table :data="orderList" border stripe>
         <el-table-column type="index" label="编号"></el-table-column>
-        <el-table-column label="" prop="orderNum"></el-table-column>
+        <el-table-column label="订单编号" prop="orderNum"></el-table-column>
         <el-table-column label="商品名称" prop="name"></el-table-column>
         <el-table-column label="商品数量" prop="count"> </el-table-column>
         <el-table-column label="订单状态" prop="orderState">
@@ -98,42 +98,42 @@
           <el-input v-model="dataModel.firstCategory"> </el-input>
         </el-form-item>
         <el-form-item label="商品二级分类">
-          <el-input v-model="dataModel.orderState"> </el-input>
+          <el-input v-model="dataModel.secondCategory"> </el-input>
         </el-form-item>
         <el-form-item label="计量单位">
-          <el-input v-model="dataModel.date"> </el-input>
+          <el-input v-model="dataModel.measurement"> </el-input>
         </el-form-item>
         <el-form-item label="原价">
-          <el-input v-model="dataModel.operateName"> </el-input>
+          <el-input v-model="dataModel.originPrice"> </el-input>
         </el-form-item>
         <el-form-item label="商品折扣">
-          <el-input v-model="dataModel.name"> </el-input>
+          <el-input v-model="dataModel.discount"> </el-input>
         </el-form-item>
         <el-form-item label="成本价">
-          <el-input v-model="dataModel.count"> </el-input>
-        </el-form-item>
-        <el-form-item label="型号">
           <el-input v-model="dataModel.price"> </el-input>
         </el-form-item>
+        <el-form-item label="型号">
+          <el-input v-model="dataModel.model"> </el-input>
+        </el-form-item>
         <el-form-item label="供应商">
-          <el-input v-model="dataModel.clientName"> </el-input>
+          <el-input v-model="dataModel.supplierName"> </el-input>
         </el-form-item>
         <el-form-item label="厂商">
-          <el-input v-model="dataModel.address"> </el-input>
+          <el-input v-model="dataModel.factoryName"> </el-input>
         </el-form-item>
         <el-form-item label="保质期限">
-          <el-input v-model="dataModel.phone"> </el-input>
+          <el-input v-model="dataModel.shelfLife"> </el-input>
         </el-form-item>
         <el-form-item label="可否退货">
-          <el-input v-model="dataModel.postcode"> </el-input>
+          <el-input v-model="dataModel.enabledReturn"> </el-input>
         </el-form-item>
         <el-form-item label="备注">
-          <el-input v-model="dataModel.substation"> </el-input>
+          <el-input v-model="dataModel.content"> </el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="newGoodDialog = false">取 消</el-button>
-        <el-button v-print="'#print'">打印</el-button>
+        <el-button @click="goodsEnter">商品录入</el-button>
       </span>
     </el-dialog>
   </div>
@@ -178,6 +178,9 @@ export default {
         this.newCategoryDialog = false
         this.queryCategory();
       })
+    },
+    goodsEnter() {
+
     }
   },
   created() {
