@@ -157,7 +157,18 @@
           <el-input v-model="dataModel.model"> </el-input>
         </el-form-item>
         <el-form-item label="供应商">
-          <el-input v-model="dataModel.supplierName"> </el-input>
+          <el-select
+            v-model="categoryModel.parentId"
+            placeholder="请选择一级类目"
+          >
+            <el-option
+              v-for="item in suppliers"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="厂商">
           <el-input v-model="dataModel.factoryName"> </el-input>
@@ -234,7 +245,8 @@ export default {
       substationList: [],
       goodsModel: {},
       goodsDetailvialog: false,
-      goodsDataModel: {}
+      goodsDataModel: {},
+      suppliers: []
     };
   },
   methods: {
@@ -294,12 +306,18 @@ export default {
         this.goodsDataModel.substaionName = res.obj
         this.goodsDetailvialog = true
       })
+    },
+    getAllSupplier() {
+      this.$http.get('/supplier/search').then(res => {
+        this.suppliers = res.obj
+      })
     }
   },
   created() {
     this.queryCategory();
     this.searchList();
     this.getParentSubstation();
+    this.getAllSupplier();
   },
 };
 </script>

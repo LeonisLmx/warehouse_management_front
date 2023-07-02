@@ -204,7 +204,18 @@
             <el-input v-model="orderInfo.orderNum" disabled></el-input>
           </el-form-item>
           <el-form-item label="商品名称" prop="name">
-            <el-input v-model="orderInfo.name"></el-input>
+            <el-select
+              v-model="orderInfo.goodsId"
+              placeholder="请选择商品名称"
+            >
+              <el-option
+                v-for="item in goodsList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="订购价格" prop="price">
             <el-input v-model="orderInfo.price"></el-input>
@@ -256,7 +267,18 @@
           label-width="90px"
         >
           <el-form-item label="商品名" prop="name">
-            <el-input v-model="addOrder.name"></el-input>
+            <el-select
+              v-model="orderInfo.goodsId"
+              placeholder="请选择商品名称"
+            >
+              <el-option
+                v-for="item in goodsList"
+                :key="item.id"
+                :label="item.name + ' (剩余数量' + item.remainCount + ')'"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="订购数量" prop="count">
             <el-input
@@ -320,9 +342,6 @@
               placeholder="请输入内容"
               @select="handleSelect"
             ></el-autocomplete>
-          </el-form-item>
-          <el-form-item label="是否缺货">
-            <el-checkbox v-model="addOrder.checked">缺货</el-checkbox>
           </el-form-item>
         </el-form>
           <span slot="footer" class="dialog-footer">
@@ -441,6 +460,7 @@ export default {
           value: 4,
         },
       ],
+      goodsList: []
     };
   },
   methods: {
@@ -573,10 +593,16 @@ export default {
       .then(res => {
           this.getOrderList();
       })
+    },
+    getGoodsList() {
+      this.$http.get('/goods/searchList').then(res => {
+        this.goodsList = res.obj
+      })
     }
   },
   created() {
     this.getOrderList();
+    this.getGoodsList();
   },
 };
 </script>

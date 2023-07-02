@@ -11,13 +11,12 @@ import OutputList from "../components/output/OutputList";
 import Enter from "../components/warehouse/Enter";
 import Out from "../components/warehouse/Out";
 import Check from "../components/warehouse/Check";
-import Ship from "../components/data/Report";
 import ClientList from "../components/client/ClientList";
 import MyWarehouse from "../components/warehouse/MyWarehouse";
 import Region from "../components/warehouse/Region";
 import Shelf from "../components/warehouse/Shelf";
 import Transition from "../components/schedule/Transition";
-import Report from "../components/data/Report";
+import Report from "../components/finance/Report";
 import AddressBook from "../components/comm/AddressBook";
 import OrderDetail from "../components/client/OrderDetail";
 import ManageOrderTable from "../components/client/ManageOrderTable";
@@ -28,6 +27,12 @@ import PrintExpress from "../components/substation/PrintExpress";
 import Receipt from "../components/substation/Receipt";
 import GoodsManage from "../components/express/GoodsManage";
 import CenterWarehouse from "../components/warehouse/CenterWarehouse";
+import SupplierManage from "../components/express/SupplierManage";
+import ExplainSubstation from "../components/express/ExplainSubstation";
+import ExplainSupplierOrders from "../components/express/ExplainSupplierOrders";
+import InvoiceManage from "../components/finance/InvoiceManage";
+import SettlementSupplier from "../components/finance/SettlementSupplier";
+import SubstationSettlement from "../components/finance/SubstationSettlement";
 Vue.use(VueRouter)
 
 const routes = [
@@ -77,10 +82,6 @@ const routes = [
             {
                 path:'/check',
                 component:Check
-            },
-            {
-                path:'/ship',
-                component:Ship
             },
             {
                 path:'/clientList',
@@ -133,6 +134,24 @@ const routes = [
             },{
                 path: '/centerWarehouse',
                 component: CenterWarehouse
+            },{
+                path: '/supplierManage',
+                component: SupplierManage
+            },{
+                path: '/explainSubstation',
+                component: ExplainSubstation
+            },{
+                path: '/explainSupplierOrders',
+                component: ExplainSupplierOrders
+            },{
+                path: '/settlementSupplier',
+                component: SettlementSupplier
+            },{
+                path: '/invoiceManage',
+                component: InvoiceManage
+            },{
+                path: '/substationSettlement',
+                component: SubstationSettlement
             }
         ]
     }
