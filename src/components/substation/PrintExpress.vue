@@ -7,8 +7,9 @@
     </el-breadcrumb>
     <el-card>
       <!--            搜索框区域-->
-      <el-row :gutter="20">
-        <el-col :span="6">
+      <el-header>
+      <el-form :inline="true">
+        <el-form-item>
           <el-date-picker
             v-model="pramTime"
             type="daterange"
@@ -17,8 +18,8 @@
             end-placeholder="结束日期"
           >
           </el-date-picker>
-        </el-col>
-        <el-col :span="3">
+        </el-form-item>
+        <el-form-item>
             <el-select
             v-model="queryInfo.orderType"
             placeholder="请选择订单类型"
@@ -32,8 +33,8 @@
             >
             </el-option>
           </el-select>
-        </el-col>
-        <el-col :span="3">
+        </el-form-item>
+        <el-form-item>
             <el-select
             v-model="queryInfo.expressName"
             placeholder="请选择快递员"
@@ -47,11 +48,10 @@
             >
             </el-option>
           </el-select>
-        </el-col>
-        <el-col :span="8">
-          <el-button type="primary" @click="getOrderList">搜索</el-button>
-        </el-col>
-      </el-row>
+        </el-form-item>
+        <el-button type="primary" @click="getOrderList">搜索</el-button>
+      </el-form>
+      </el-header>
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
         <el-table-column type="index" label="编号"></el-table-column>

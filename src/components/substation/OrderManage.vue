@@ -7,21 +7,21 @@
     </el-breadcrumb>
     <el-card>
       <!--            搜索框区域-->
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-col>
-        <el-col :span="8">
+      <el-header>
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </el-form-item>
           <el-button type="primary" @click="getOrderList">搜索</el-button>
-        </el-col>
-      </el-row>
+        </el-form>
+      </el-header>
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
         <el-table-column type="index" label="编号"></el-table-column>
@@ -72,7 +72,9 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="stationDialog = false">取 消</el-button>
-          <el-button type="primary" @click="SelectExpressState">确 定</el-button>
+          <el-button type="primary" @click="SelectExpressState"
+            >确 定</el-button
+          >
         </span>
       </el-dialog>
     </el-card>

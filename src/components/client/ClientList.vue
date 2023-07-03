@@ -8,37 +8,37 @@
     </el-breadcrumb>
     <el-card>
       <el-header>
-        <el-col :span="4">
-          <el-input
-            placeholder="请输入电话号码"
-            v-model="queryInfo.phoneNumber"
-            clearable
-            @clear="getClientList"
-          >
-          </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-input
-            placeholder="请输入用户身份证号码"
-            v-model="queryInfo.cardNumber"
-            clearable
-            @clear="getClientList"
-          >
-          </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-input
-            placeholder="请输入用户姓名"
-            v-model="queryInfo.clientName"
-            clearable
-            @clear="getClientList"
-          >
-          </el-input>
-        </el-col>
-        <el-col :span="4">
+        <el-form :inline="true">
+          <el-form-item>
+            <el-input
+              placeholder="请输入电话号码"
+              v-model="queryInfo.phoneNumber"
+              clearable
+              @clear="getClientList"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              placeholder="请输入用户身份证号码"
+              v-model="queryInfo.cardNumber"
+              clearable
+              @clear="getClientList"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              placeholder="请输入用户姓名"
+              v-model="queryInfo.clientName"
+              clearable
+              @clear="getClientList"
+            >
+            </el-input>
+          </el-form-item>
           <el-button type="primary" @click="getClientList">搜索</el-button>
           <el-button type="danger" @click="openAddClient">添加客户</el-button>
-        </el-col>
+        </el-form>
       </el-header>
       <!--客户列表区域  -->
       <el-table
@@ -337,7 +337,7 @@ export default {
       if (!res) return;
       this.clientList = res.obj;
       this.loading = false;
-      this.CLIENT_LIST = this.clientList
+      this.CLIENT_LIST = this.clientList;
     },
     //查看订单
     async openOrderList(clientId) {
@@ -419,7 +419,7 @@ export default {
       const res = await this.$http.get("/client/getBlacklist");
       this.blacklist = res.obj;
       this.blackLoading = false;
-    }
+    },
   },
   created() {
     this.getClientList();

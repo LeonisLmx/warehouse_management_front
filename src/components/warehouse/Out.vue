@@ -8,21 +8,21 @@
 
     <el-card>
       <!--        查询框-->
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-col>
-        <el-col :span="4">
+      <el-header style="over-flow: auto">
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </el-form-item>
           <el-button type="primary" @click="getOutList">搜索</el-button>
-        </el-col>
-      </el-row>
+        </el-form>
+      </el-header>
       <el-table v-loading="loading" :data="outList" border height="490" stripe>
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column
@@ -157,7 +157,7 @@ export default {
       reverse: true,
       goodsOrders: [],
       kd: {},
-      goodsOutDialog: false
+      goodsOutDialog: false,
     };
   },
   methods: {
@@ -207,13 +207,12 @@ export default {
         });
     },
     viewDetails(row) {
-        this.goodsOutDialog = true
-        this.$http.post('/goods/ship', {"goodsId":row.id})
-        .then(res => {
-            console.log(res)
-            this.goodsOrders = res.obj
-        })
-    }
+      this.goodsOutDialog = true;
+      this.$http.post("/goods/ship", { goodsId: row.id }).then((res) => {
+        console.log(res);
+        this.goodsOrders = res.obj;
+      });
+    },
   },
   created() {
     this.getOutList();

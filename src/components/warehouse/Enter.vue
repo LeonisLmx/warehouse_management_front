@@ -9,22 +9,22 @@
 
     <el-card>
       <!--        查询框-->
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-col>
-        <el-col :span="4">
+      <el-header style="over-flow: auto">
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            >
+            </el-date-picker>
+          </el-form-item>
           <el-button type="primary" @click="getEnterList">搜索</el-button>
           <el-button type="primary" @click="openEnter">新建存储</el-button>
-        </el-col>
-      </el-row>
+        </el-form>
+      </el-header>
       <el-table
         v-loading="loading"
         :data="enterList"
@@ -94,11 +94,15 @@
           <el-cascader
             v-model="enter.substaionId"
             :options="substationList"
-            :props="{ expandTrigger: 'hover' }">
+            :props="{ expandTrigger: 'hover' }"
+          >
           </el-cascader>
         </el-form-item>
         <el-form-item label="供应商名字">
-          <el-input v-model="enter.supplierName" style="width: 220px"></el-input>
+          <el-input
+            v-model="enter.supplierName"
+            style="width: 220px"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -231,19 +235,20 @@ export default {
         lid[i] = pid[i][pid[i].length - 1];
       }
       this.enter.lid = lid.join(",");
-      console.log(this.enter.substaionId)
-      this.enter.substationId = this.enter.substaionId[this.enter.substaionId.length - 1]
-      console.log(this.enter.substationId)
+      console.log(this.enter.substaionId);
+      this.enter.substationId =
+        this.enter.substaionId[this.enter.substaionId.length - 1];
+      console.log(this.enter.substationId);
       this.$refs.enterRef.validate(async (valid) => {
-          if (!valid){
-            return
-          }
-          const res = await this.$http.post("/warehouse/enter", this.enter);
-          if (res) {
-            this.getEnterList();
-            this.enterDialog = false;
-          } else return;
-        });
+        if (!valid) {
+          return;
+        }
+        const res = await this.$http.post("/warehouse/enter", this.enter);
+        if (res) {
+          this.getEnterList();
+          this.enterDialog = false;
+        } else return;
+      });
     },
     //远程查询数据
     async querySearchAsync(queryString, cb) {

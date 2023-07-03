@@ -7,55 +7,55 @@
     </el-breadcrumb>
     <el-card>
       <!--            搜索框区域-->
-      <el-row :gutter="20">
-        <el-col :span="4">
-          <el-input
-            v-model="queryInfo.name"
-            placeholder="请输入商品名称"
-            clearable
-            @clear="getOrderList"
-          >
-          </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-input
-            v-model="queryInfo.orderNumber"
-            placeholder="请输入订单号"
-            clearable
-            @clear="getOrderList"
-          >
-          </el-input>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            v-model="queryInfo.orderState"
-            placeholder="请选择货物状态"
-            clearable
-          >
-            <el-option label="正常" value="1"></el-option>
-            <el-option label="缺货" value="2"></el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            v-model="queryInfo.orderType"
-            placeholder="请选择订单类型"
-            clearable
-          >
-            <el-option
-              v-for="item in orderTypeOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+      <el-header>
+        <el-form :inline="true">
+          <el-form-item>
+            <el-input
+              v-model="queryInfo.name"
+              placeholder="请输入商品名称"
+              clearable
+              @clear="getOrderList"
             >
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="queryInfo.orderNumber"
+              placeholder="请输入订单号"
+              clearable
+              @clear="getOrderList"
+            >
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.orderState"
+              placeholder="请选择货物状态"
+              clearable
+            >
+              <el-option label="正常" value="1"></el-option>
+              <el-option label="缺货" value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.orderType"
+              placeholder="请选择订单类型"
+              clearable
+            >
+              <el-option
+                v-for="item in orderTypeOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-button type="primary" @click="getOrderList">搜索</el-button>
           <el-button type="primary" @click="openAddOrder">新建订单</el-button>
-        </el-col>
-      </el-row>
+        </el-form>
+      </el-header>
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
@@ -204,10 +204,7 @@
             <el-input v-model="orderInfo.orderNum" disabled></el-input>
           </el-form-item>
           <el-form-item label="商品名称" prop="name">
-            <el-select
-              v-model="orderInfo.goodsId"
-              placeholder="请选择商品名称"
-            >
+            <el-select v-model="orderInfo.goodsId" placeholder="请选择商品名称">
               <el-option
                 v-for="item in goodsList"
                 :key="item.id"
@@ -267,10 +264,7 @@
           label-width="90px"
         >
           <el-form-item label="商品名" prop="name">
-            <el-select
-              v-model="orderInfo.goodsId"
-              placeholder="请选择商品名称"
-            >
+            <el-select v-model="orderInfo.goodsId" placeholder="请选择商品名称">
               <el-option
                 v-for="item in goodsList"
                 :key="item.id"
@@ -344,7 +338,7 @@
             ></el-autocomplete>
           </el-form-item>
         </el-form>
-          <span slot="footer" class="dialog-footer">
+        <span slot="footer" class="dialog-footer">
           <el-button @click="addOrderDialog = false">取 消</el-button>
           <el-button type="primary" @click="addOrderYes">确 定</el-button>
         </span>
@@ -460,7 +454,7 @@ export default {
           value: 4,
         },
       ],
-      goodsList: []
+      goodsList: [],
     };
   },
   methods: {
@@ -589,16 +583,17 @@ export default {
       return this.GLOBAL.parseOrderState(orderState);
     },
     editOrderState(row) {
-      this.$http.post('/order/stateUpdate', {"orderNum": row.orderNum, "orderState": 1})
-      .then(res => {
+      this.$http
+        .post("/order/stateUpdate", { orderNum: row.orderNum, orderState: 1 })
+        .then((res) => {
           this.getOrderList();
-      })
+        });
     },
     getGoodsList() {
-      this.$http.get('/goods/searchList').then(res => {
-        this.goodsList = res.obj
-      })
-    }
+      this.$http.get("/goods/searchList").then((res) => {
+        this.goodsList = res.obj;
+      });
+    },
   },
   created() {
     this.getOrderList();

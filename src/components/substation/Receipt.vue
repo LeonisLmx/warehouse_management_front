@@ -7,51 +7,51 @@
     </el-breadcrumb>
     <el-card>
       <!--            搜索框区域-->
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            v-model="queryInfo.orderType"
-            placeholder="请选择订单类型"
-            clearable
-          >
-            <el-option
-              v-for="item in orderTypeOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+      <el-header>
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
             >
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            v-model="queryInfo.expressName"
-            placeholder="请选择快递员"
-            clearable
-          >
-            <el-option
-              v-for="item in expressNameOptions"
-              :key="item"
-              :label="item"
-              :value="item"
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.orderType"
+              placeholder="请选择订单类型"
+              clearable
             >
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
+              <el-option
+                v-for="item in orderTypeOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.expressName"
+              placeholder="请选择快递员"
+              clearable
+            >
+              <el-option
+                v-for="item in expressNameOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-button type="primary" @click="getOrderList">搜索</el-button>
-        </el-col>
-      </el-row>
+        </el-form>
+      </el-header>
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
         <el-table-column type="index" label="编号"></el-table-column>
@@ -59,7 +59,7 @@
         <el-table-column label="姓名" prop="clientName"></el-table-column>
         <el-table-column label="联系电话" prop="phone"></el-table-column>
         <el-table-column label="任务分站" prop="substationId">
-            <template slot-scope="scope">
+          <template slot-scope="scope">
             {{ parseStation(scope.row.substationId) }}
           </template>
         </el-table-column>
@@ -121,13 +121,17 @@
           </el-select>
         </el-form-item>
         <el-form-item label="客户满意度">
-          <el-input v-model="dataModel.customerSatisfaction" placeholder="请输入客户满意度，最大为100"> </el-input>
+          <el-input
+            v-model="dataModel.customerSatisfaction"
+            placeholder="请输入客户满意度，最大为100"
+          >
+          </el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-          <el-button @click="receiptDialog = false">取 消</el-button>
-          <el-button type="primary" @click="receiptRequest">确 定</el-button>
-        </span>
+        <el-button @click="receiptDialog = false">取 消</el-button>
+        <el-button type="primary" @click="receiptRequest">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -169,17 +173,21 @@ export default {
         },
       ],
       expressNameOptions: [],
-      optionOrderTypes: [{
-        label: '完成',
-        value: 9
-      }, {
-        label: '部分完成',
-        value: 10
-      }, {
-        label: '失败',
-        value: 11
-      }],
-      receiptDialog: false
+      optionOrderTypes: [
+        {
+          label: "完成",
+          value: 9,
+        },
+        {
+          label: "部分完成",
+          value: 10,
+        },
+        {
+          label: "失败",
+          value: 11,
+        },
+      ],
+      receiptDialog: false,
     };
   },
   methods: {
@@ -248,15 +256,15 @@ export default {
       });
     },
     selectOrder(row) {
-        this.dataModel = row
-        this.receiptDialog = true
-        this.dataModel.orderState = null
+      this.dataModel = row;
+      this.receiptDialog = true;
+      this.dataModel.orderState = null;
     },
     receiptRequest() {
-        this.$http.post('/order/receipt', this.dataModel).then(res => {
-            this.receiptDialog = false
-            this.getOrderList();
-        })
+      this.$http.post("/order/receipt", this.dataModel).then((res) => {
+        this.receiptDialog = false;
+        this.getOrderList();
+      });
     },
     getSubstations() {
       this.$http.get("/substation/list").then((res) => {

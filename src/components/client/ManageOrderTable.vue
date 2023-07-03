@@ -7,49 +7,49 @@
     </el-breadcrumb>
     <el-card>
       <!--搜索框区域-->
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-col>
-        <el-col :span="3">
-          <el-select
-            v-model="queryInfo.operateId"
-            placeholder="请选择操作人员"
-            clearable
-          >
-            <el-option
-              v-for="item in operateOption"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+      <el-header>
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
             >
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.operateId"
+              placeholder="请选择操作人员"
+              clearable
+            >
+              <el-option
+                v-for="item in operateOption"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-button type="primary" @click="getOrders">搜索</el-button>
-        </el-col>
-      </el-row>
+        </el-form>
+      </el-header>
       <el-table :data="orderList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="订单类型" prop="orderType"> 
-            <template slot-scope="scope">
+        <el-table-column label="订单类型" prop="orderType">
+          <template slot-scope="scope">
             {{ parseOrderType(scope.row.orderType) }}
           </template>
         </el-table-column>
         <el-table-column label="订单数量" prop="nums"> </el-table-column>
         <el-table-column label="订单总价" prop="total"> </el-table-column>
-        <el-table-column label="操作人" prop="operateId"> 
-            <template slot-scope="scope">
-                {{ parseManageName(scope.row.operateId) }}
-            </template>
+        <el-table-column label="操作人" prop="operateId">
+          <template slot-scope="scope">
+            {{ parseManageName(scope.row.operateId) }}
+          </template>
         </el-table-column>
       </el-table>
       <!--分页区域-->
@@ -109,9 +109,9 @@ export default {
       });
     },
     parseManageName(id) {
-        return this.userList.find(ans => ans.id == id).name
+      return this.userList.find((ans) => ans.id == id).name;
     },
-        //改变每页的页数
+    //改变每页的页数
     handleSizeChange(newSize) {
       this.queryInfo.size = newSize;
       this.getOrders();
