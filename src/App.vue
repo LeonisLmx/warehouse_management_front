@@ -34,7 +34,7 @@ export default {
       this.b=true;
     }
     if (this.b){
-      this.$websocket.dispatch('websocket_init',"ws://localhost:8181/ws/asset/"+this.$store.state.user.name);
+      this.$websocket.dispatch('websocket_init',"ws://warehouse-container:8181/ws/asset/"+this.$store.state.user.name);
       this.b=false;
     }
 

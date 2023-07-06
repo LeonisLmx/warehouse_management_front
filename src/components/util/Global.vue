@@ -33,6 +33,12 @@ const orderStateOption = [
     },{
         label: "回执录入",
         value: 9
+    },{
+      label: "部分完成",
+      value: 10
+    },{
+      label: "失败",
+      value: 11
     }
   ]
 

@@ -8,49 +8,49 @@
     <el-card>
       <!--            搜索框区域-->
       <el-header>
-      <el-form :inline="true">
-        <el-form-item>
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item>
-            <el-select
-            v-model="queryInfo.orderType"
-            placeholder="请选择订单类型"
-            clearable
-          >
-            <el-option
-              v-for="item in orderTypeOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
             <el-select
-            v-model="queryInfo.expressName"
-            placeholder="请选择快递员"
-            clearable
-          >
-            <el-option
-              v-for="item in expressNameOptions"
-              :key="item"
-              :label="item"
-              :value="item"
+              v-model="queryInfo.orderType"
+              placeholder="请选择订单类型"
+              clearable
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-button type="primary" @click="getOrderList">搜索</el-button>
-      </el-form>
+              <el-option
+                v-for="item in orderTypeOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.expressName"
+              placeholder="请选择快递员"
+              clearable
+            >
+              <el-option
+                v-for="item in expressNameOptions"
+                :key="item"
+                :label="item"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-button type="primary" @click="getOrderList">搜索</el-button>
+        </el-form>
       </el-header>
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
@@ -70,7 +70,8 @@
         </el-table-column>
         <el-table-column label="订单时间" prop="date"> </el-table-column>
         <el-table-column label="快递员" prop="expressName"> </el-table-column>
-        <el-table-column label="最后更新时间" prop="updateTime"> </el-table-column>
+        <el-table-column label="最后更新时间" prop="updateTime">
+        </el-table-column>
         <el-table-column fixed="right" label="操作" width="180px">
           <template slot-scope="scope">
             <el-tooltip
@@ -92,62 +93,68 @@
       </el-table>
     </el-card>
 
-    <el-dialog title="信息预览" :visible.sync="viewDialog" width="45%" id="print" ref="print">
-        <el-form :model="dataModel" label-width="100px">
-          <el-form-item label="订单号">
-            <el-input v-model="dataModel.orderNum" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="订单类型">
-            <el-input v-model="dataModel.orderType" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="用户名">
-            <el-input v-model="dataModel.clientName" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="订单状态">
-            <el-input v-model="dataModel.orderState" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="送货日期">
-            <el-input v-model="dataModel.date" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="录入员">
-            <el-input v-model="dataModel.operateName" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="商品名称">
-            <el-input v-model="dataModel.name" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="商品数量">
-            <el-input v-model="dataModel.count" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="金额">
-            <el-input v-model="dataModel.price" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="收货人">
-            <el-input v-model="dataModel.clientName" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="地址">
-            <el-input v-model="dataModel.address" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="电话">
-            <el-input v-model="dataModel.phone" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="邮编">
-            <el-input v-model="dataModel.postcode" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="执行任务分站">
-            <el-input v-model="dataModel.substation" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="发票">
-            <el-input v-model="dataModel.invoice" disabled> </el-input>
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="dataModel.content" disabled> </el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="viewDialog = false">取 消</el-button>
-          <el-button v-print="'#print'">打印</el-button>
-        </span>
-      </el-dialog>
+    <el-dialog
+      title="信息预览"
+      :visible.sync="viewDialog"
+      width="45%"
+      id="print"
+      ref="print"
+    >
+      <el-form :model="dataModel" label-width="100px">
+        <el-form-item label="订单号">
+          <el-input v-model="dataModel.orderNum" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="订单类型">
+          <el-input v-model="dataModel.orderType" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="dataModel.clientName" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="订单状态">
+          <el-input v-model="dataModel.orderState" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="送货日期">
+          <el-input v-model="dataModel.date" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="录入员">
+          <el-input v-model="dataModel.operateName" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-input v-model="dataModel.name" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="dataModel.count" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="金额">
+          <el-input v-model="dataModel.price" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="收货人">
+          <el-input v-model="dataModel.clientName" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="dataModel.address" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="dataModel.phone" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="邮编">
+          <el-input v-model="dataModel.postcode" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="执行任务分站">
+          <el-input v-model="dataModel.substation" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="发票">
+          <el-input v-model="dataModel.invoice" disabled> </el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="dataModel.content" disabled> </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="viewDialog = false">取 消</el-button>
+        <el-button v-print="'#print'">打印</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -159,7 +166,7 @@ export default {
         query: "",
         pageNum: 1,
         size: 7,
-        orderState: '7,8'
+        orderState: "7,8",
       },
       clientOptions: [],
       total: 0,
@@ -189,7 +196,7 @@ export default {
       ],
       expressNameOptions: [],
       viewDialog: false,
-      dataModel: {}
+      dataModel: {},
     };
   },
   methods: {
@@ -247,22 +254,22 @@ export default {
       return this.GLOBAL.parseOrderState(state);
     },
     queryAllExpressNames() {
-        this.$http.get("/util/allExpressName").then(res => {
-            console.log(res)
-            this.expressNameOptions = res.obj;
-        })
+      this.$http.get("/util/allExpressName").then((res) => {
+        console.log(res);
+        this.expressNameOptions = res.obj;
+      });
     },
     viewOrderInfo(row) {
-        this.dataModel = row
-        this.viewDialog = true
+      this.dataModel = row;
+      this.viewDialog = true;
     },
     printOrder() {
-        var oldHtml = $("body").innerHTML; 
-        var printbox = $(".box").innerHTML;
-        $("body").innerHTML = printbox;
-        window.print();
-        $("body").innerHTML = oldHtml;
-    }
+      var oldHtml = $("body").innerHTML;
+      var printbox = $(".box").innerHTML;
+      $("body").innerHTML = printbox;
+      window.print();
+      $("body").innerHTML = oldHtml;
+    },
   },
   created() {
     this.querySearchAsync();

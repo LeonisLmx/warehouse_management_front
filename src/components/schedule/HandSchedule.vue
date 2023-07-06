@@ -164,18 +164,13 @@
           :inline="true"
         >
           <el-form-item label="所属分站:" prop="substation">
-            <el-select
-              v-model="stationModel.substationId"
-              placeholder="请选择所属分站"
-            >
-              <el-option
-                v-for="item in substations"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
+              <el-cascader
+            v-model="stationModel.substationId"
+            :options="substationList"
+            :props="{ expandTrigger: 'hover' }"
+            placeholder="请选择所属分站"
+          >
+          </el-cascader>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -213,6 +208,7 @@ export default {
       viewDialog: false,
       operateOption: [],
       substations: [],
+      substationList: []
     };
   },
   methods: {
@@ -311,12 +307,19 @@ export default {
         this.substations = res.obj;
       });
     },
+    getParentSubstation() {
+      this.$http.get("/substation/listAll").then((res) => {
+        this.substationList = res.obj;
+        console.log(this.substationList)
+      });
+    },
   },
   created() {
     this.getSubstations();
     this.querySearchAsync();
     this.queryManage();
     this.getOrderList();
+    this.getParentSubstation();
   },
 };
 </script>

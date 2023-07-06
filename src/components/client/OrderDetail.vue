@@ -8,64 +8,64 @@
     <el-card>
       <!--            搜索框区域-->
       <el-header>
-      <el-form :inline="true">
-        <el-form-item>
-          <el-date-picker
-            v-model="pramTime"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item>
-          <el-select
-            v-model="queryInfo.clientId"
-            placeholder="请选择客户"
-            clearable
-          >
-            <el-option
-              v-for="item in clientOptions"
-              :key="item.clientId"
-              :label="item.name"
-              :value="item.clientId"
+        <el-form :inline="true">
+          <el-form-item>
+            <el-date-picker
+              v-model="pramTime"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-select
-            v-model="queryInfo.orderType"
-            placeholder="请选择订单类型"
-            clearable
-          >
-            <el-option
-              v-for="item in orderTypeOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.clientId"
+              placeholder="请选择客户"
+              clearable
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-select
-            v-model="queryInfo.operateId"
-            placeholder="请选择操作人员"
-            clearable
-          >
-            <el-option
-              v-for="item in operateOption"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+              <el-option
+                v-for="item in clientOptions"
+                :key="item.clientId"
+                :label="item.name"
+                :value="item.clientId"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.orderType"
+              placeholder="请选择订单类型"
+              clearable
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-button type="primary" @click="getOrderList">搜索</el-button>
-      </el-form>
+              <el-option
+                v-for="item in orderTypeOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="queryInfo.operateId"
+              placeholder="请选择操作人员"
+              clearable
+            >
+              <el-option
+                v-for="item in operateOption"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-button type="primary" @click="getOrderList">搜索</el-button>
+        </el-form>
       </el-header>
       <!--            表格区域-->
       <el-table v-loading="loading" :data="orderList" border stripe>
@@ -81,7 +81,7 @@
         <el-table-column label="商品数量" prop="count"> </el-table-column>
         <el-table-column label="订单状态" prop="orderState">
           <template slot-scope="scope">
-            {{ parseOrderState(scope.row.orderType) }}
+            {{ parseOrderState(scope.row.orderState) }}
           </template>
         </el-table-column>
         <el-table-column label="订单类型" prop="orderType">
@@ -178,10 +178,10 @@ export default {
         });
     },
     parseOrderType(orderType) {
-      return this.GLOBAL.parseOrderType(orderType)
+      return this.GLOBAL.parseOrderType(orderType);
     },
     parseOrderState(state) {
-      return this.GLOBAL.parseOrderState(state)
+      return this.GLOBAL.parseOrderState(state);
     },
   },
   created() {

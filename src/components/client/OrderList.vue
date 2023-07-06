@@ -203,7 +203,7 @@
           <el-form-item label="订单编号">
             <el-input v-model="orderInfo.orderNum" disabled></el-input>
           </el-form-item>
-          <el-form-item label="商品名称" prop="name">
+          <el-form-item label="商品名称" prop="goodsId">
             <el-select v-model="orderInfo.goodsId" placeholder="请选择商品名称">
               <el-option
                 v-for="item in goodsList"
@@ -220,9 +220,9 @@
           <el-form-item label="订购数量" prop="count">
             <el-input v-model="orderInfo.count"></el-input>
           </el-form-item>
-          <el-form-item label="支付状态:" prop="address">
+          <!-- <el-form-item label="支付状态:" prop="address">
             <el-switch v-model="orderInfo.pay"> </el-switch>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="editOrderDialog = false">取 消</el-button>
@@ -238,12 +238,16 @@
           finish-status="success"
         >
           <el-step title="生成订单"></el-step>
-          <el-step title="新建生产"></el-step>
-          <el-step title="生产完成"></el-step>
-          <el-step title="存入待检库"></el-step>
-          <el-step title="入库"></el-step>
-          <el-step title="出库"></el-step>
-          <el-step title="确认收货"></el-step>
+          <el-step title="待调度"></el-step>
+          <el-step title="订单出库"></el-step>
+          <el-step title="订单运输"></el-step>
+          <el-step title="验货入库"></el-step>
+          <el-step title="待分配"></el-step>
+          <el-step title="配送出库"></el-step>
+          <el-step title="领货配送"></el-step>
+          <el-step title="回执录入" v-if="state <= 9"></el-step>
+          <el-step title="部分完成" v-if="state == 10"></el-step>
+          <el-step title="失败" v-if="state == 11"></el-step>
         </el-steps>
         <span slot="footer" class="dialog-footer">
           <el-button @click="scheduleDialog = false">关闭</el-button>
@@ -263,8 +267,8 @@
           ref="addOrderRef"
           label-width="90px"
         >
-          <el-form-item label="商品名" prop="name">
-            <el-select v-model="orderInfo.goodsId" placeholder="请选择商品名称">
+          <el-form-item label="商品名" prop="goodsId">
+            <el-select v-model="addOrder.goodsId" placeholder="请选择商品名称">
               <el-option
                 v-for="item in goodsList"
                 :key="item.id"
@@ -317,15 +321,15 @@
           <el-form-item label="原订单号" v-if="addOrder.orderType == 2">
             <el-input v-model="addOrder.oldOrderNumber"></el-input>
           </el-form-item>
-          <el-form-item label="投递分站">
+          <!-- <el-form-item label="投递分站">
             <el-input v-model="addOrder.deliverySubstation"></el-input>
-          </el-form-item>
-          <el-form-item label="送货日期">
+          </el-form-item> -->
+          <!-- <el-form-item label="送货日期">
             <el-input v-model="addOrder.deliverTime"></el-input>
           </el-form-item>
           <el-form-item label="商品说明">
             <el-input v-model="addOrder.goodsContent"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="备注">
             <el-input v-model="addOrder.content"></el-input>
           </el-form-item>
@@ -415,14 +419,14 @@ export default {
         clientName: "",
       },
       addOrder: {
-        name: "",
+        goodsId: "",
         count: "",
         price: "",
         clientId: "",
         clientName: "",
       },
       addOrderRules: {
-        name: [{ required: true, message: "请填写商品名", trigger: "blur" }],
+        goodsId: [{ required: true, message: "请选择商品", trigger: "blur" }],
         count: [{ required: true, message: "请填写订购数量", trigger: "blur" }],
         price: [{ required: true, message: "请填写订单价格", trigger: "blur" }],
         client: [
@@ -487,7 +491,13 @@ export default {
     //查看进度
     openSchedule(orderInfo) {
       this.scheduleDialog = true;
-      this.state = orderInfo.orderState;
+      if(orderInfo.orderState == -1){
+        this.state = -1
+      }else if(this.orderInfo.orderState <= 8){
+        this.state = this.orderInfo.orderState - 1
+      }else{
+        this.state = orderInfo.orderState;
+      }
     },
     //打开添加订单
     openAddOrder() {
@@ -534,6 +544,7 @@ export default {
         const res = await this.$http.post("/order/addOrder", this.addOrder);
         if (res) {
           this.getOrderList();
+          this.getGoodsList();
         } else return;
         this.addOrderDialog = false;
       });
@@ -545,6 +556,7 @@ export default {
         const res = await this.$http.put("/order/editOrder", this.orderInfo);
         if (res) {
           this.getOrderList();
+          this.getGoodsList();
         } else return;
         this.editOrderDialog = false;
       });

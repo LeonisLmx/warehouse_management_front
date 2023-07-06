@@ -43,8 +43,8 @@
         <el-table-column label="订单号" prop="orderNum"></el-table-column>
         <el-table-column label="商品名称" prop="name"></el-table-column>
         <el-table-column label="商品数量" prop="count"> </el-table-column>
-        <el-table-column label="订单状态" prop="orderState"> 
-            <template slot-scope="scope">
+        <el-table-column label="订单状态" prop="orderState">
+          <template slot-scope="scope">
             {{ parseOrderState(scope.row.orderState) }}
           </template>
         </el-table-column>
@@ -200,7 +200,7 @@ export default {
         query: "",
         pageNum: 1,
         size: 7,
-        orderState: 2
+        orderState: 2,
       },
       clientOptions: [],
       total: 0,
@@ -269,20 +269,22 @@ export default {
         });
     },
     parseOrderType(orderType) {
-      return this.GLOBAL.parseOrderType(orderType)
+      return this.GLOBAL.parseOrderType(orderType);
     },
     selectStation(row) {
-      MessageBox.confirm(
-        "将自动分配投递分站，是否继续",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      )
-        .then(async () => {
-          // todo 分配投递分站
+      MessageBox.confirm("将自动分配投递分站，是否继续", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$http
+            .post("/order/selectRandomSubstation", {
+              orderNum: row.orderNum,
+            })
+            .then((res) => {
+              this.getOrderList();
+            });
         })
         .catch(() => {
           Message({
@@ -317,13 +319,15 @@ export default {
         });
     },
     parseOrderState(state) {
-        return this.GLOBAL.parseOrderState(state)
+      return this.GLOBAL.parseOrderState(state);
     },
     editOrderState(row) {
-        this.$http.post('/order/stateUpdate/', {"orderState": 2,"orderNum": row.orderNum}).then(res => {
-            this.getOrderList();
-        })
-    }
+      this.$http
+        .post("/order/stateUpdate/", { orderState: 2, orderNum: row.orderNum })
+        .then((res) => {
+          this.getOrderList();
+        });
+    },
   },
   created() {
     this.querySearchAsync();
