@@ -3,7 +3,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-      <el-breadcrumb-item>订单列表</el-breadcrumb-item>
+      <el-breadcrumb-item>订单管理查询</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <!--            搜索框区域-->
@@ -36,8 +36,8 @@
           </el-form-item>
           <el-form-item>
             <el-select
-              v-model="queryInfo.orderType"
-              placeholder="请选择订单类型"
+              v-model="queryInfo.orderState"
+              placeholder="请选择订单状态"
               clearable
             >
               <el-option
@@ -122,6 +122,7 @@ export default {
       orderTypeOption: this.GLOBAL.orderStateOption,
       orderStateOption: this.GLOBAL.orderStateOption,
       pramTime: "",
+      operateOption: []
     };
   },
   methods: {
@@ -137,7 +138,6 @@ export default {
       if (res) {
         this.total = res.obj.total;
         this.orderList = res.obj.data;
-        console.log(this.orderList);
       } else return;
       this.loading = false;
     },

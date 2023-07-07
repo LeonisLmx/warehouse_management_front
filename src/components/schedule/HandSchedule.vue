@@ -303,7 +303,7 @@ export default {
       return this.GLOBAL.parseOrderState(state);
     },
     getSubstations() {
-      this.$http.get("/substation/listData").then((res) => {
+      this.$http.get("/substation/list").then((res) => {
         this.substations = res.obj;
       });
     },

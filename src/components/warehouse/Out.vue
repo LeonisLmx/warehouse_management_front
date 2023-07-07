@@ -182,7 +182,7 @@ export default {
     async openShip(item) {
       this.shipDialog = true;
       this.ship.goodsId = item.id;
-      this.getOrders();
+      this.getOrders(item.id);
     },
     async shipYes() {
       console.log(this.ship);
@@ -192,15 +192,16 @@ export default {
         this.getOutList();
       }
     },
-    getOrders() {
+    getOrders(goodsId) {
       this.$http
-        .get("/order/orderList/?pageNum=1&size=1000&orderState=2")
+        .get("/order/orderList/?pageNum=1&size=1000&orderState=3&goodsId=" + goodsId)
         .then((res) => {
           let list = res.obj.data;
           this.orders = [];
           for (var i = 0; i < list.length; i++) {
+            console.log(list[i])
             this.orders.push({
-              label: list[i].orderNum,
+              label: "订单号：" + list[i].orderNum + " 所需数量：" + list[i].count,
               value: list[i].orderNum + "-" + list[i].count,
             });
           }
