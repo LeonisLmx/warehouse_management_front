@@ -269,7 +269,7 @@ export default {
     editSubstation() {
       this.$http
         .post("/order/selectSubstation", {
-          substationId: this.stationModel.substationId,
+          substationId: this.stationModel.substationId[this.stationModel.substationId.length - 1],
           orderNum: this.stationModel.orderNum,
         })
         .then((res) => {
@@ -303,14 +303,13 @@ export default {
       return this.GLOBAL.parseOrderState(state);
     },
     getSubstations() {
-      this.$http.get("/substation/list").then((res) => {
+      this.$http.get("/substation/listData").then((res) => {
         this.substations = res.obj;
       });
     },
     getParentSubstation() {
       this.$http.get("/substation/listAll").then((res) => {
         this.substationList = res.obj;
-        console.log(this.substationList)
       });
     },
   },

@@ -203,7 +203,6 @@ export default {
       if (res) {
         this.total = res.obj.total;
         this.orderList = res.obj.data;
-        console.log(this.orderList);
       } else return;
       this.loading = false;
     },
@@ -245,6 +244,7 @@ export default {
       return this.GLOBAL.parseOrderState(state);
     },
     parseStation(stationId) {
+      console.log(this.substations)
       return this.substations.find((res) => {
         return res.id == stationId;
       }).name;
@@ -267,17 +267,17 @@ export default {
       });
     },
     getSubstations() {
-      this.$http.get("/substation/list").then((res) => {
+      this.$http.get("/substation/listData").then((res) => {
         this.substations = res.obj;
       });
     },
   },
   created() {
+    this.getSubstations();
     this.querySearchAsync();
     this.queryManage();
     this.getOrderList();
     this.queryAllExpressNames();
-    this.getSubstations();
   },
 };
 </script>
