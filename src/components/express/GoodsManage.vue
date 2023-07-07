@@ -158,8 +158,8 @@
         </el-form-item>
         <el-form-item label="供应商">
           <el-select
-            v-model="categoryModel.parentId"
-            placeholder="请选择一级类目"
+            v-model="dataModel.supplierId"
+            placeholder="请选择供应商"
           >
             <el-option
               v-for="item in suppliers"

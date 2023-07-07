@@ -29,7 +29,6 @@ Vue.prototype.deleteRequest = deleteRequest;
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.$http=axios;
 Vue.prototype.$websocket=websocket;
-// Vue.prototype.websocket=new WebSocket("ws://localhost:8181/ws/asset/" + this.$store.state.user.name);
 Vue.config.productionTip = false;
 Vue.prototype.$echarts = echarts;
 Vue.prototype.GLOBAL = globalVal

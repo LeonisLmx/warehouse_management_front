@@ -153,7 +153,7 @@
                     if (res) {
                         window.sessionStorage.setItem("user", JSON.stringify(res.obj));
                         this.$store.commit('changeState', res.obj);
-                        this.$websocket.dispatch('websocket_init',"ws://localhost:8181/ws/asset/"+this.$store.state.user.name)
+                        // this.$websocket.dispatch('websocket_init',"ws://localhost:8181/ws/asset/"+this.$store.state.user.name)
                     } else {
                         setTimeout(() => {
                             loading.close();

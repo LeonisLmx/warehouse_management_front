@@ -1,9 +1,9 @@
 let proxyObj = {};
 
-proxyObj['/ws'] = {
-    ws: true,
-    target: "ws://localhost:8181"
-};
+// proxyObj['/ws'] = {
+//     ws: true,
+//     target: "ws://localhost:8181"
+// };
 
 proxyObj['/'] = {
     ws: false,
