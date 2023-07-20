@@ -98,6 +98,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pageNum"
+        :page-sizes="[2, 5, 7, 10]"
+        :page-size="queryInfo.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
     </el-card>
 
     <el-dialog title="回执录入" :visible.sync="receiptDialog" width="45%">
@@ -244,7 +254,6 @@ export default {
       return this.GLOBAL.parseOrderState(state);
     },
     parseStation(stationId) {
-      console.log(this.substations)
       return this.substations.find((res) => {
         return res.id == stationId;
       }).name;
@@ -273,7 +282,7 @@ export default {
     },
   },
   created() {
-    this.getSubstations();
+    // this.getSubstations();
     this.querySearchAsync();
     this.queryManage();
     this.getOrderList();

@@ -30,7 +30,6 @@
         </el-col>
       </el-row>
       <el-table
-        v-loading="loading"
         :data="substationList"
         border
         height="490"

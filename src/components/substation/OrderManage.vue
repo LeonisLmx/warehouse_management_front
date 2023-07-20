@@ -3,7 +3,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>分站管理</el-breadcrumb-item>
-      <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+      <el-breadcrumb-item>任务分配</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <!--            搜索框区域-->
@@ -58,6 +58,17 @@
           </template>
         </el-table-column>
       </el-table>
+       <!--分页区域-->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pageNum"
+        :page-sizes="[2, 5, 7, 10]"
+        :page-size="queryInfo.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
 
       <el-dialog title="分配快递员" :visible.sync="stationDialog" width="45%">
         <el-form
@@ -111,17 +122,18 @@ export default {
   methods: {
     async getOrderList() {
       this.loading = true;
-      if (this.pramTime != "") {
+      this.queryInfo.startTime = null
+      this.queryInfo.endTime = null
+      if (this.pramTime != null && this.pramTime.length > 0) {
         this.queryInfo.startTime = this.pramTime[0].getTime();
         this.queryInfo.endTime = this.pramTime[1].getTime();
       }
-      const res = await this.$http.get("/order/orderList/", {
+      const res = await this.$http.get("/order/list/", {
         params: this.queryInfo,
       });
       if (res) {
         this.total = res.obj.total;
         this.orderList = res.obj.data;
-        console.log(this.orderList);
       } else return;
       this.loading = false;
     },

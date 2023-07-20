@@ -91,6 +91,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <!--分页区域-->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pageNum"
+        :page-sizes="[2, 5, 7, 10]"
+        :page-size="queryInfo.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
     </el-card>
 
     <el-dialog
@@ -166,7 +177,7 @@ export default {
         query: "",
         pageNum: 1,
         size: 7,
-        orderState: "7,8",
+        orderState: 8,
       },
       clientOptions: [],
       total: 0,
@@ -201,12 +212,14 @@ export default {
   },
   methods: {
     async getOrderList() {
-      this.loading = true;
-      if (this.pramTime != "") {
+      this.loading = true
+      this.queryInfo.startTime = null
+      this.queryInfo.endTime = null
+      if (this.pramTime != "" && this.pramTime != null) {
         this.queryInfo.startTime = this.pramTime[0].getTime();
         this.queryInfo.endTime = this.pramTime[1].getTime();
       }
-      const res = await this.$http.get("/order/orderList/", {
+      const res = await this.$http.get("/order/list/", {
         params: this.queryInfo,
       });
       if (res) {
